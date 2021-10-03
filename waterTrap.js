@@ -1,5 +1,5 @@
 
-$("#calculateBtn").click(function() {
+$("#generateBtn").click(function() {
     // read input array
     var heights = [];
     
@@ -11,7 +11,7 @@ $("#calculateBtn").click(function() {
        return;
    }
 
-   alert(trap(heights));
+   trap(heights);
 });
 
 
@@ -76,42 +76,94 @@ $("#calculateBtn").click(function() {
         console.log(level);
     })
 
-    renderElevation(heights);
+    renderElevation(levels, waterCells);
 
     return waterCells;
 }
 
 
-var renderElevation = function(levels) {
+
+/**
+ * @param {number[]} heights
+ * @return {number}
+ */
+
+var renderElevation = function(levels, waterCells) {
 
     var graph = new joint.dia.Graph;
+    let cellSize = 60;
+    let graphWidth = 1200;
+    let graphHeight = 600;
     
     var paper = new joint.dia.Paper({
         el: document.getElementById('myholder'),
         model: graph,
-        width: 800,
-        height: 600,
-        gridSize: 1
+        width: graphWidth,
+        height: graphHeight,
+        gridSize: cellSize,
+        interactive: false
     });
 
-    var block = new joint.shapes.standard.Rectangle();
+    paper.drawGrid({
+        thickness: 2,
+        color: 'black'    
+    });
+
     // a solid block
-    //rect.position(100, 30);
-    block.resize(50, 50);
-    block.attr({ body: { fill: 'lightgrey' }});
-    block.addTo(graph);
+    var block = new joint.shapes.standard.Rectangle();
+    block.resize(cellSize, cellSize);
+    block.attr({ body: { fill: 'grey', strokeWidth: 0 }});
 
     // a water block
     var water = new joint.shapes.standard.Rectangle();
-    water.resize(50, 50);
-    water.translate(400, 0);
-    water.attr({body: { fill: 'lightblue'}});
-    //rect2.attr('label/text', 'World!');
-    water.addTo(graph);
+    water.resize(cellSize, cellSize);
+    water.attr({body: { fill: 'lightblue', strokeWidth: 0}});
 
     // draw elevation
+
+    // go through levels and position blocks
     
+    let xOffset = 0;
+    let yOffset = 0;
+
+     levels.forEach((level, levelIndex) => {
+        //console.log("level index: " + levelIndex);
+        yOffset = graphHeight - cellSize * (levelIndex + 1);
+        level.forEach((cell, cellIndex) => {
+            let newBlock;
+            if(cell.blockCell === 1) {
+                newBlock = block.clone();                
+            }
+            else if(cell.waterCell === 1) {
+                newBlock = water.clone();
+            }
+            else {
+                return; // air
+            }
+            newBlock.translate(xOffset + cellSize * cellIndex + 1, yOffset);
+            newBlock.addTo(graph);                  
+        })
+    });
+
+    // output result
+    let resultWidth = 200;
+    block.position(graphWidth - resultWidth, 0);
+    block.resize(resultWidth, 40);
+    block.attr(
+         { 
+            body: {
+                fill: 'lightgreen',
+                strokeWidth: 0
+            },
+            label: {
+                text: waterCells + " water cells",
+                fill: 'black',
+                fontSize: 24,
+                fontWeight: 'bold'
+            }
+        });
 
 
-
+    block.addTo(graph);
+ 
 } 

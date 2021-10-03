@@ -1,0 +1,57 @@
+<html>
+    <head>
+        
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.3.1/joint.css" />
+    </head>
+    <body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.3.1/joint.js"></script>
+
+        <label for="heights"></label>
+        <input type="text" name="heights" id="heights">
+        <button id="calculateBtn">Calculate</button>
+
+        <div id="myholder" style="border: solid 1px #dddddd"></div>
+
+        <script type="text/javascript">
+
+           /*  var graph = new joint.dia.Graph;
+    
+            var paper = new joint.dia.Paper({
+                el: document.getElementById('myholder'),
+                model: graph,
+                width: 600,
+                height: 600,
+                gridSize: 1
+            });
+    
+            var rect = new joint.shapes.standard.Rectangle();
+            rect.position(100, 30);
+            rect.resize(100, 40);
+            rect.attr({
+                body: {
+                    fill: 'blue'
+                },
+                label: {
+                    text: 'Hello',
+                    fill: 'white'
+                }
+            });
+            rect.addTo(graph);
+    
+            var rect2 = rect.clone();
+            rect2.translate(300, 0);
+            rect2.attr('label/text', 'World!');
+            rect2.addTo(graph); */
+    
+           /*  var link = new joint.shapes.standard.Link();
+            link.source(rect);
+            link.target(rect2);
+            link.addTo(graph); */
+    
+        </script>
+    </body>
+    <script src="waterTrap.js"></script>
+</html>  

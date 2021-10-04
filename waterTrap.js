@@ -4,13 +4,13 @@ $("#generateBtn").click(function() {
     var heights = [];
     
     var str = $("#heights").val();
+    if(str.length === 0)  {
+        alert("invalid input");
+        return;
+    }
     heights = str.split(",");   
 
-   if(heights.length === 0)  {
-       alert("invalid input");
-       return;
-   }
-
+   // go thru data, get number of water cells and render input with result
    trap(heights);
 });
 
@@ -25,8 +25,8 @@ $("#generateBtn").click(function() {
     let levels = new Array();   // array of levels
 
     const level = {
-        "blockCell": 0,
-        "waterCell": 0
+        "blockCell": 0, // known solid block
+        "waterCell": 0  // air or water, initially empty cell
     }
 
     // create as many arrays as levels
@@ -72,10 +72,11 @@ $("#generateBtn").click(function() {
         })
     });
 
-    levels.forEach(level => {
+/*     levels.forEach(level => {
         console.log(level);
-    })
+    }) */
 
+    // present graph and result
     renderElevation(levels, waterCells);
 
     return waterCells;
@@ -96,7 +97,7 @@ var renderElevation = function(levels, waterCells) {
     let graphHeight = 600;
     
     var paper = new joint.dia.Paper({
-        el: document.getElementById('myholder'),
+        el: document.getElementById('paper'),
         model: graph,
         width: graphWidth,
         height: graphHeight,
@@ -117,12 +118,11 @@ var renderElevation = function(levels, waterCells) {
     // a water block
     var water = new joint.shapes.standard.Rectangle();
     water.resize(cellSize, cellSize);
-    water.attr({body: { fill: 'lightblue', strokeWidth: 0}});
+    water.attr({body: { fill: 'lightskyblue', strokeWidth: 0}});
 
-    // draw elevation
+    // draw elevation and falling rain populating cells appropiately
 
     // go through levels and position blocks
-    
     let xOffset = 0;
     let yOffset = 0;
 
@@ -132,23 +132,38 @@ var renderElevation = function(levels, waterCells) {
         level.forEach((cell, cellIndex) => {
             let newBlock;
             if(cell.blockCell === 1) {
-                newBlock = block.clone();                
+                // solid block cell
+                newBlock = block.clone(); 
+                newBlock.translate(xOffset + cellSize * cellIndex + 1, yOffset); 
             }
             else if(cell.waterCell === 1) {
                 newBlock = water.clone();
+                // watercell drops from outside the paper
+                newBlock.position(xOffset + cellSize * cellIndex + 1, -100);
+                newBlock.transition('position', { x: xOffset + cellSize * cellIndex + 1, y: yOffset }, {
+                    delay: 100,
+                    duration: 2000,
+                    valueFunction: joint.util.interpolate.object
+                });     
             }
             else {
-                return; // air
+                newBlock = water.clone();
+                // watercells drop from outside and disappear
+                newBlock.position(xOffset + cellSize * cellIndex + 1, -100);
+                newBlock.transition('position', { x: xOffset + cellSize * cellIndex + 1, y: yOffset + levels.length * cellSize }, {
+                    delay: 100,
+                    duration: 2000,
+                    valueFunction: joint.util.interpolate.object
+                });     
             }
-            newBlock.translate(xOffset + cellSize * cellIndex + 1, yOffset);
-            newBlock.addTo(graph);                  
+            newBlock.addTo(graph);
         })
     });
 
     // output result on upper right corner of paper
-    let resultWidth = 200;
-    block.position(graphWidth - resultWidth, 0);
-    block.resize(resultWidth, 40);
+    let resultWidth = 300;
+    block.position(graphWidth + resultWidth, 0);
+    block.resize(resultWidth, 80);
     block.attr(
          { 
             body: {
@@ -156,13 +171,19 @@ var renderElevation = function(levels, waterCells) {
                 strokeWidth: 0
             },
             label: {
-                text: waterCells + " water cells",
+                text: waterCells + " water cell(s)",
                 fill: 'black',
-                fontSize: 24,
+                fontSize: 36,
                 fontWeight: 'bold'
             }
         });
 
 
-    block.addTo(graph); 
+    block.addTo(graph);
+    // display result dragging it from outside the paper
+    block.transition('position', {x: graphWidth - resultWidth, y: 0 }, {
+        delay: 100,
+        duration: 3000,
+        valueFunction: joint.util.interpolate.object
+    });   
 } 

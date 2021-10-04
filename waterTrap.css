@@ -1,0 +1,14 @@
+#heights {
+    margin:20px 0; 
+    width:300px; 
+    height:30px
+}
+
+#generateBtn {
+    height:30px; 
+    margin-left:20px
+}
+
+#paper {
+    border: solid 1px #999999;
+}

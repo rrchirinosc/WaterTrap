@@ -1,6 +1,6 @@
 <html>
     <head>
-        
+        <link rel="stylesheet" href="waterTrap.css">
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.3.1/joint.css" />
     </head>
     <body>
@@ -14,10 +14,10 @@
             <p>Given n non-negative integers representing an elevation map where the width of each bar is 1, 
                 compute how much water it can trap after raining.</p>
             <label for="heights">Array of heights:</label>
-            <input type="text" name="heights" id="heights" style="margin:20px 0; width:300px; height:30px">
-            <button id="generateBtn" style="height:30px; margin-left:20px">Generate</button>
+            <input type="text" name="heights" id="heights">
+            <button id="generateBtn">Generate</button>
 
-            <div id="myholder" style="border: solid 1px #999999"></div>
+            <div id="paper"></div>
         </div>
 
     </body>

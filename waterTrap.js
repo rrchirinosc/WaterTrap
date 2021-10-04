@@ -84,8 +84,8 @@ $("#generateBtn").click(function() {
 
 
 /**
- * @param {number[]} heights
- * @return {number}
+ * @param {levels[]} rows of cells
+ * @return {number} number of water cells
  */
 
 var renderElevation = function(levels, waterCells) {
@@ -145,7 +145,7 @@ var renderElevation = function(levels, waterCells) {
         })
     });
 
-    // output result
+    // output result on upper right corner of paper
     let resultWidth = 200;
     block.position(graphWidth - resultWidth, 0);
     block.resize(resultWidth, 40);
@@ -164,6 +164,5 @@ var renderElevation = function(levels, waterCells) {
         });
 
 
-    block.addTo(graph);
- 
+    block.addTo(graph); 
 } 

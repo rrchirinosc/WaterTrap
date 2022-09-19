@@ -10,6 +10,26 @@ $("#generateBtn").click(function() {
     }
     heights = str.split(",");   
 
+    // check here if entered values are between 0 and 10 ann no more than 20
+    if(heights.length > 20) {
+        alert("The maximum elements in the array is 20, " + " " + heights.length + " were given.");
+        return;
+    }
+    else {
+        let valid = true;
+        heights.forEach(element => {
+            if(element > 10) {
+                valid = false;
+                return;
+            }
+        });
+        
+        if(!valid) {
+            alert("the max element height must be 10 or less") 
+            return;
+        }
+    }
+
    // go thru data, get number of water cells and render input with result
    trap(heights);
 });
